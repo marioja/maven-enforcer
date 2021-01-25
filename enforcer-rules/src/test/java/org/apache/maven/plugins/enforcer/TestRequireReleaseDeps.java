@@ -22,13 +22,14 @@ package org.apache.maven.plugins.enforcer;
 import java.io.IOException;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.testing.ArtifactStubFactory;
 import org.apache.maven.plugins.enforcer.utils.EnforcerRuleUtilsHelper;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuildingRequest;
+
+import junit.framework.TestCase;
 
 /**
  * The Class TestNoSnapshots.
@@ -81,7 +82,7 @@ public class TestRequireReleaseDeps
         project.setParent( parent );
         project.setArtifacts( null );
         project.setDependencyArtifacts( null );
-        helper = EnforcerTestUtils.getHelper(project);
+        helper = EnforcerTestUtils.getHelper( project );
 
         rule.setFailWhenParentIsSnapshot( true );
         EnforcerRuleUtilsHelper.execute( rule, helper, true );
@@ -89,15 +90,16 @@ public class TestRequireReleaseDeps
         rule.setFailWhenParentIsSnapshot( false );
         EnforcerRuleUtilsHelper.execute( rule, helper, false );
 
-
     }
 
     private RequireReleaseDeps newRequireReleaseDeps()
     {
         RequireReleaseDeps rule = new RequireReleaseDeps()
         {
-            protected Set<Artifact> getDependenciesToCheck( MavenProject project )
-            {
+            @Override
+            protected Set<Artifact> getDependenciesToCheck( ProjectBuildingRequest request )
+                         {
+            MavenProject project = request.getProject();
                 // the integration with dependencyGraphTree is verified with the integration tests
                 // for unit-testing 
                 return isSearchTransitive() ? project.getArtifacts() : project.getDependencyArtifacts();

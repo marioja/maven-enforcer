@@ -33,7 +33,7 @@ public class BannedPlugins
     extends BannedDependencies
 {
     @Override
-    protected Set<Artifact> getDependenciesToCheck( MavenProject project )
+    protected Set<Artifact> getDependencies( MavenProject project )
     {
         return project.getPluginArtifacts();
     }

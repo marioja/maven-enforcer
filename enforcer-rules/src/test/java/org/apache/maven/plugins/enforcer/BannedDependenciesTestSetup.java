@@ -29,6 +29,7 @@ import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.plugin.testing.ArtifactStubFactory;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuildingRequest;
 
 public class BannedDependenciesTestSetup
 {
@@ -90,18 +91,17 @@ public class BannedDependenciesTestSetup
 
     private BannedDependencies newBannedDependenciesRule()
     {
-        BannedDependencies rule = new BannedDependencies()
+        return new BannedDependencies()
         {
-            @SuppressWarnings( "unchecked" )
             @Override
-            protected Set<Artifact> getDependenciesToCheck( MavenProject project )
+            protected Set<Artifact> getDependenciesToCheck( ProjectBuildingRequest request )
             {
+                  MavenProject project = request.getProject();
                 // the integration with dependencyGraphTree is verified with the integration tests
                 // for unit-testing
                 return isSearchTransitive() ? project.getArtifacts() : project.getDependencyArtifacts();
             }
         };
-        return rule;
     }
 
 

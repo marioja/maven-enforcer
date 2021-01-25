@@ -33,6 +33,7 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.plugins.enforcer.utils.MockEnforcerExpressionEvaluator;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;
@@ -57,9 +58,9 @@ public final class EnforcerTestUtils
 
         Properties systemProperties = new Properties();
         systemProperties.put( "maven.version", "3.0" );
-        when( mer.getUserProperties() ).thenReturn( new Properties() );
-        when( mer.getSystemProperties() ).thenReturn( systemProperties );
-
+        when( mer.getSystemProperties()).thenReturn( systemProperties );
+        when( mer.getProjectBuildingRequest() ).thenReturn( new DefaultProjectBuildingRequest() );
+         
         MavenExecutionResult meresult = mock( MavenExecutionResult.class );
         return new MavenSession( mock, null, mer, meresult );
     }
@@ -106,6 +107,8 @@ public final class EnforcerTestUtils
     public static EnforcerRuleHelper getHelper( MavenProject project, boolean mockExpression )
     {
         MavenSession session = getMavenSession();
+        session.getProjectBuildingRequest().setProject( project );
+        
         ExpressionEvaluator eval;
         if ( mockExpression )
         {
@@ -130,6 +133,8 @@ public final class EnforcerTestUtils
     public static EnforcerRuleHelper getHelper( MavenProject project, ExpressionEvaluator eval )
     {
         MavenSession session = getMavenSession();
+        session.getProjectBuildingRequest().setProject( project );
+
         return new DefaultEnforcementRuleHelper( session, eval, new SystemStreamLog(), null );
     }
 

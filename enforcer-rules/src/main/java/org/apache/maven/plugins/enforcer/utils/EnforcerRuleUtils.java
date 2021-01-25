@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleHelper;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.ReportPlugin;
@@ -31,6 +30,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.sonatype.aether.impl.ArtifactResolver;
 
 /**
  * The Class EnforcerRuleUtils.
@@ -40,6 +40,9 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 public class EnforcerRuleUtils
 {
 
+    /** The factory. */
+    ArtifactFactory factory;
+    
     /** The resolver. */
     ArtifactResolver resolver;
 
